@@ -1,0 +1,220 @@
+﻿<Page x:Class="OnlineStore2023.View.AdminStaffAddEditPage"
+      xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+      xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+      xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+      xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+      xmlns:local="clr-namespace:OnlineStore2023.View"
+      xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
+      xmlns:util="clr-namespace:OnlineStore2023.Utilities" 
+      mc:Ignorable="d" 
+      d:DesignHeight="600"
+      d:DesignWidth="750"
+      Style="{StaticResource Page_Style}"
+      Title="AdminStaffAddEditPage">
+
+    <Page.Resources>
+        <Style TargetType="materialDesign:PackIcon">
+            <Setter Property="Foreground" 
+                    Value="White"/>
+            <Setter Property="Width" 
+                    Value="20"/>
+            <Setter Property="Height" 
+                    Value="20"/>
+            <Setter Property="Margin" 
+                    Value="0,0,5,0"/>
+            <Setter Property="VerticalAlignment" 
+                    Value="Center"/>
+        </Style>
+    </Page.Resources>
+
+
+    <Grid>
+        <DockPanel 
+            Margin="5,0" 
+            HorizontalAlignment="Stretch" 
+            LastChildFill="False">
+            
+            <TextBlock 
+                DockPanel.Dock="Top" Margin="10,10,10,20" 
+                Text="Создание/редактирование работника" 
+                Style="{StaticResource CustomHeader1LvlTextBlock_Style}"/>
+
+            <!--Contact info and password change-->
+            <StackPanel 
+                DockPanel.Dock="Left" 
+                Width="300" Margin="10,0">
+                
+                <TextBlock 
+                    Text="Контактная информация:" 
+                    Style="{StaticResource CustomHeader2LvlTextBlock_Style}"/>
+
+                <WrapPanel Margin="4">
+                    <materialDesign:PackIcon 
+                        Kind="Person"/>
+                    <TextBox 
+                        MaxLength="50" 
+                        materialDesign:HintAssist.Hint="Имя" 
+                        Text="{Binding CurEmployee.User.UsersDatum.UserFirstName}" 
+                        ToolTip="Имя сотрудника"/>
+                </WrapPanel>
+                <WrapPanel Margin="4">
+                    <materialDesign:PackIcon 
+                        Kind="Person"/>
+                    <TextBox  
+                        MaxLength="50" 
+                        materialDesign:HintAssist.Hint="Фамилия" 
+                        Text="{Binding CurEmployee.User.UsersDatum.UserLastName}"  
+                        ToolTip="Фамилия сотрудника"/>
+                </WrapPanel>
+                <WrapPanel Margin="4">
+                    <materialDesign:PackIcon 
+                        Kind="Person"/>
+                    <TextBox  
+                        MaxLength="50" 
+                        materialDesign:HintAssist.Hint="Отчество" 
+                        Text="{Binding CurEmployee.User.UsersDatum.UserMiddleName}"  
+                        ToolTip="Отчество сотрудника"/>
+                </WrapPanel>
+                <WrapPanel Margin="4">
+                    <materialDesign:PackIcon 
+                        Kind="Phone" />
+                    <TextBox 
+                        MaxLength="12" 
+                        materialDesign:HintAssist.Hint="Номер телефона" 
+                        Text="{Binding CurEmployee.User.UsersDatum.UserPhoneNumber}"  
+                        ToolTip="Номер телефона"/>
+                </WrapPanel>
+
+                <Button 
+                    Content="Сохранить" 
+                    HorizontalAlignment="Center" 
+                    Command="{Binding SaveCommand}" 
+                    Margin="0,20,0,0" />
+
+                <StackPanel 
+                    Visibility="{Binding ChangePasswordSectionVisibility}"
+                    Margin="0,60,5,5">
+                    <TextBlock 
+                        Style="{StaticResource CustomHeader2LvlTextBlock_Style}"
+                        Text="Смена пароля:" />
+
+                    <PasswordBox 
+                        materialDesign:HintAssist.Hint="Новый пароль" 
+                        util:PasswordBoxAssistant.BindPassword="True" 
+                        util:PasswordBoxAssistant.BoundPassword="{Binding NewPassword, Mode=TwoWay}"/>
+                    <PasswordBox 
+                        materialDesign:HintAssist.Hint="Повторите пароль" 
+                        util:PasswordBoxAssistant.BindPassword="True" 
+                        util:PasswordBoxAssistant.BoundPassword="{Binding ConfirmPassword, Mode=TwoWay}"/>
+
+                    <Button 
+                        Content="Изменить" 
+                        HorizontalAlignment="Center" 
+                        Command="{Binding ChangePasswordCommand}" 
+                        Margin="0,20,0,0"/>
+                </StackPanel>
+            </StackPanel>
+
+            <!--User data-->
+            <StackPanel DockPanel.Dock="Right" Width="350" Margin="50,0,50,0">
+                <TextBlock 
+                    Text="Данные пользователя:" 
+                    Style="{StaticResource CustomHeader2LvlTextBlock_Style}"/>
+
+                <TextBlock FontSize="15" Margin="0,10,0,0">
+                    <Run FontWeight="Medium" Text="ID: " />
+                    <Run Text="{Binding CurEmployee.UserId}" Foreground="White"/>
+                </TextBlock>
+
+                <WrapPanel Margin="0,10,0,0">
+                    <materialDesign:PackIcon 
+                        Kind="Person"/>
+                    <TextBox 
+                        MaxLength="50" 
+                        materialDesign:HintAssist.Hint="Логин" 
+                        Text="{Binding CurEmployee.User.UserLogin}" 
+                        ToolTip="Логин пользователя"/>
+                </WrapPanel>
+                <WrapPanel Margin="0,10,0,0" Visibility="{Binding RegPasswordSectionVisibility}" >
+                    <materialDesign:PackIcon 
+                        Kind="Password"/>
+                    <PasswordBox
+                        MaxLength="50" 
+                        materialDesign:HintAssist.Hint="Задайте пароль" 
+                        util:PasswordBoxAssistant.BindPassword="True" 
+                        util:PasswordBoxAssistant.BoundPassword="{Binding PasswordRegistration, Mode=TwoWay}"/>
+                </WrapPanel>
+                <WrapPanel Margin="0,10,0,0">
+                    <materialDesign:PackIcon 
+                        Kind="Worker"/>
+
+                    <ComboBox 
+                        ToolTip="Должность работника"
+                        ItemsSource="{Binding EmployeeJobTitle}"
+                        SelectedItem="{Binding CurEmployee.JobTitle, Mode=TwoWay}">
+                    </ComboBox>
+                </WrapPanel>
+                <WrapPanel Margin="0,10,0,0">
+                    <materialDesign:PackIcon 
+                        Kind="Passport"/>
+                    <TextBox 
+                        MaxLength="4" 
+                        materialDesign:HintAssist.Hint="Серия паспорта" 
+                        Text="{Binding CurEmployee.EmployeePassportSeries}" 
+                        ToolTip="Серия паспорта"/>
+                </WrapPanel>
+                <WrapPanel Margin="0,10,0,0">
+                    <materialDesign:PackIcon 
+                        Kind="Passport"/>
+                    <TextBox 
+                        MaxLength="6" 
+                        materialDesign:HintAssist.Hint="Номер паспорта" 
+                        Text="{Binding CurEmployee.EmployeePassportNumber}" 
+                        ToolTip="Номер паспорта"/>
+                </WrapPanel>
+                <WrapPanel Margin="0,10,0,0">
+                    <materialDesign:PackIcon 
+                        Kind="ListStatus" />
+                    <ComboBox 
+                        ToolTip="Is active?"
+                        ItemsSource="{Binding UserStates}"
+                        SelectedItem="{Binding IsActiveString, Mode=TwoWay}">
+                    </ComboBox>
+                </WrapPanel>
+                <WrapPanel Margin="0,10,0,0">
+                    <materialDesign:PackIcon 
+                        Kind="People"/>
+                    <ComboBox 
+                        ToolTip="System Role"
+                        ItemsSource="{Binding Roles}"
+                        SelectedItem="{Binding CurEmployee.User.UserType, Mode=TwoWay}">
+                    </ComboBox>
+                </WrapPanel>
+            </StackPanel>
+        </DockPanel>
+
+        <materialDesign:Snackbar 
+            MessageQueue="{Binding MessageQueue}" 
+            FontFamily="Microsoft JhengHei UI Light"
+            FontSize="12" 
+            Width="290"/>
+
+        <Grid 
+            Grid.Row="0" Grid.Column="0" 
+            Grid.RowSpan="5" 
+            Background="#CC111111" 
+            HorizontalAlignment="Stretch" VerticalAlignment="Stretch" 
+            Visibility="{Binding LoadingScreen}">
+
+            <materialDesign:Card 
+                UniformCornerRadius="14" Padding="4" Opacity="1" 
+                HorizontalAlignment="Center" VerticalAlignment="Center" 
+                Background="#FF272B2F">
+
+                <ProgressBar  
+                    Style="{StaticResource MaterialDesignCircularProgressBar}" 
+                    Value="0" IsIndeterminate="True"/>
+            </materialDesign:Card>
+        </Grid>
+    </Grid>
+</Page>

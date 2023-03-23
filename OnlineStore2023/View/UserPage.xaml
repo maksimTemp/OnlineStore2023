@@ -1,0 +1,79 @@
+﻿<Page x:Class="OnlineStore2023.View.UserPage"
+      xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+      xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+      xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+      xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+      xmlns:local="clr-namespace:OnlineStore2023.View"
+      xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
+      mc:Ignorable="d"
+      xmlns:ff="clr-namespace:FunctionalFun.UI"
+
+      
+      d:DesignHeight="600"
+      d:DesignWidth="750"
+      Background="#FF212529"
+      Title="UserPage">
+
+    <Grid>
+        <DockPanel Margin="4,0" HorizontalAlignment="Stretch" LastChildFill="False">
+            <TextBlock DockPanel.Dock="Top" Margin="10" Text="Настройки учетной записи" FontSize="30" HorizontalAlignment="Center" Foreground="White" FontFamily="Microsoft JhengHei UI"/>
+            <StackPanel DockPanel.Dock="Left" Width="300" Margin="10,0">
+                <TextBlock Text="Контактная информация:" HorizontalAlignment="Left" Margin="4" FontSize="24" FontWeight="Medium" Foreground="White" FontFamily="Microsoft JhengHei UI" />
+                <WrapPanel Margin="4">
+                    <materialDesign:PackIcon Kind="Person" Width="20" Height="20" VerticalAlignment="Center" Foreground="White" Margin="0,0,5,0"/>
+                    <TextBox VerticalAlignment="Center" FontSize="14" Width="200" HorizontalAlignment="Left" MaxLength="50" materialDesign:HintAssist.Hint="Имя" Text="{Binding FirstName}" Foreground="White" FontFamily="Microsoft JhengHei UI Light" />
+                </WrapPanel>
+                <WrapPanel Margin="4">
+                    <materialDesign:PackIcon Kind="Person" Width="20" Height="20" VerticalAlignment="Center" Foreground="White" Margin="0,0,5,0"/>
+                    <TextBox VerticalAlignment="Center" FontSize="14" Width="200" HorizontalAlignment="Left" MaxLength="50" materialDesign:HintAssist.Hint="Фамилия" Text="{Binding Surname}" Foreground="White" FontFamily="Microsoft JhengHei UI Light" />
+                </WrapPanel>
+                <WrapPanel Margin="4">
+                    <materialDesign:PackIcon Kind="Email" Width="20" Height="20" VerticalAlignment="Center" Foreground="White" FontFamily="Microsoft JhengHei UI Light" Margin="0,0,5,0"/>
+                    <TextBox VerticalAlignment="Center" FontSize="14" Width="200" HorizontalAlignment="Left" MaxLength="50" materialDesign:HintAssist.Hint="E-mail" Text="{Binding Email}" Foreground="White" FontFamily="Microsoft JhengHei UI Light" />
+                </WrapPanel>
+                <WrapPanel Margin="4">
+                    <materialDesign:PackIcon Kind="Phone" Width="20" Height="20" VerticalAlignment="Center" Foreground="White" Margin="0,0,5,0"/>
+                    <TextBox VerticalAlignment="Center" FontSize="14" Width="200" HorizontalAlignment="Left" MaxLength="12" materialDesign:HintAssist.Hint="Номер телефона" Text="{Binding Phone}" Foreground="White" FontFamily="Microsoft JhengHei UI Light" />
+                </WrapPanel>
+                <WrapPanel Margin="4">
+                    <materialDesign:PackIcon Kind="Home" Width="20" Height="20" VerticalAlignment="Center" Foreground="White" Margin="0,0,1,0"/>
+                    <TextBox VerticalAlignment="Center" FontSize="14" Width="200" HorizontalAlignment="Left" MaxLength="400" materialDesign:HintAssist.Hint="Адресс доставки" Text="{Binding CustomerAdressLine}" Foreground="White" FontFamily="Microsoft JhengHei UI Light" />
+                </WrapPanel>
+                <Button Content="Сохранить" HorizontalAlignment="Center" Command="{Binding SaveCommand}" FontFamily="Microsoft JhengHei UI Light" Margin="0,20,0,0"/>
+
+                <TextBlock Text="Смена пароля:" HorizontalAlignment="Left" Margin="4,60,4,4" FontSize="24" FontWeight="Medium" Foreground="White" FontFamily="Microsoft JhengHei UI" />
+
+                <PasswordBox Margin="4" FontSize="14" materialDesign:HintAssist.Hint="Старый пароль" ff:PasswordBoxAssistant.BindPassword="True" ff:PasswordBoxAssistant.BoundPassword="{Binding OldPassword, Mode=TwoWay}" FontFamily="Microsoft JhengHei UI Light" Foreground="White" />
+                <PasswordBox Margin="4" FontSize="14" materialDesign:HintAssist.Hint="Новый пароль" ff:PasswordBoxAssistant.BindPassword="True" ff:PasswordBoxAssistant.BoundPassword="{Binding NewPassword, Mode=TwoWay}" Foreground="White" FontFamily="Microsoft JhengHei UI Light" />
+                <PasswordBox Margin="4" FontSize="14" materialDesign:HintAssist.Hint="Повториет пароль" ff:PasswordBoxAssistant.BindPassword="True" ff:PasswordBoxAssistant.BoundPassword="{Binding ConfirmPassword, Mode=TwoWay}" Foreground="White" FontFamily="Microsoft JhengHei UI Light" />
+                <Button Content="Изменить" HorizontalAlignment="Center" Command="{Binding ChangePasswordCommand}" FontFamily="Microsoft JhengHei UI Light"/>
+            </StackPanel>
+
+            <StackPanel DockPanel.Dock="Right" Width="350" Margin="50,0,50,0">
+                <TextBlock Text="Данные пользователя:" HorizontalAlignment="Left" Margin="4" FontSize="24" FontWeight="Medium" Foreground="White" FontFamily="Microsoft JhengHei UI" />
+                <TextBlock FontSize="15" Margin="0,10,0,0">
+                    <Run FontWeight="Medium" Text="Логин пользователя: " Foreground="White" FontFamily="Microsoft JhengHei UI Light"/>
+                    <Run Text="{Binding UserLogin}" Foreground="White"/>
+                </TextBlock>
+                <TextBlock FontSize="15" Margin="0,20,0,0">
+                    <Run FontWeight="Medium" Text="E-mail пользователя: " FontFamily="Microsoft JhengHei UI Light" Foreground="White"/>
+                    <Run Text="{Binding EmailMain}" Foreground="White"/>
+                </TextBlock>
+                <StackPanel HorizontalAlignment="Stretch" DockPanel.Dock="Top" Margin="0,20,0,0" Visibility="{Binding EmployeeSectionVisibility}">
+                    <TextBlock FontSize="15" Margin="0,20,0,0">
+                    <Run FontWeight="Medium" Text="Ваша должность: " FontFamily="Microsoft JhengHei UI Light" Foreground="White"/>
+                    <Run Text="{Binding JobTitle}" Foreground="White"/>
+                    </TextBlock>
+                </StackPanel>
+            </StackPanel>
+        </DockPanel>
+
+        <materialDesign:Snackbar MessageQueue="{Binding MessageQueue}"/>
+
+        <!--<Grid Grid.Row="0" Grid.Column="0" Background="#FF212529" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Visibility="{Binding LoadingScreen}">
+            <materialDesign:Card UniformCornerRadius="14" Padding="4" Opacity="1" HorizontalAlignment="Center" VerticalAlignment="Center" Background="#FF272B2F">
+                <ProgressBar  Style="{StaticResource MaterialDesignCircularProgressBar}" Value="0" IsIndeterminate="True"/>
+            </materialDesign:Card>
+        </Grid>-->
+    </Grid>
+</Page>

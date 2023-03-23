@@ -1,0 +1,221 @@
+﻿<Page x:Class="OnlineStore2023.View.ProductsListPage"
+      xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+      xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+      xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+      xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+      xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
+      xmlns:viewModels="clr-namespace:OnlineStore2023.ViewModel"
+      xmlns:models="clr-namespace:OnlineStore2023.Model"
+      xmlns:datamodels="clr-namespace:OnlineStore2023.DataContext.Models"
+      xmlns:i="http://schemas.microsoft.com/xaml/behaviors"
+      xmlns:Controls="http://metro.mahapps.com/winfx/xaml/controls"
+      xmlns:converters="clr-namespace:OnlineStore2023.Converters"
+      mc:Ignorable="d" 
+      d:DesignHeight="600"
+      d:DesignWidth="800"
+      Style="{StaticResource Page_Style}"
+      Title="ProductsListPage">
+    <Page.Resources>
+        <converters:DecimalPlacesConverter x:Key="DecimalConverter"/>
+    </Page.Resources>
+
+    <Grid>
+        <Grid>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="24" />
+                <RowDefinition Height="46"/>
+                <RowDefinition Height="auto" />
+                <RowDefinition Height="*" />
+                <RowDefinition Height="auto" />
+            </Grid.RowDefinitions>
+
+            <!--Navigation-->
+            <WrapPanel Grid.Row="0" Margin="4,0,0,0" HorizontalAlignment="Left" VerticalAlignment="Center">
+                <Button VerticalAlignment="Center" Width="auto" Height="auto" Style="{StaticResource MaterialDesignIconForegroundButton}"
+                        Command="{Binding HomeCommand}">
+                    <materialDesign:PackIcon Kind="Home" Height="auto" Width="auto" Foreground="{StaticResource MaterialDesignLightForeground}"/>
+                </Button>
+                <ItemsControl ItemsSource="{Binding NavList}">
+                    <ItemsControl.ItemsPanel>
+                        <ItemsPanelTemplate>
+                            <StackPanel Orientation="Horizontal" />
+                        </ItemsPanelTemplate>
+                    </ItemsControl.ItemsPanel>
+                    <ItemsControl.ItemTemplate>
+                        <DataTemplate>
+                            <StackPanel Orientation="Horizontal" DataContext="{Binding Item2}">
+                                <TextBlock VerticalAlignment="Center" FontWeight="Black" FontSize="18" Text=">" Foreground="{StaticResource MaterialDesignLightForeground}"/>
+                                <Button VerticalAlignment="Center" Margin="0,0,0,0" Padding="1,0" Width="auto" Height="auto" Style="{StaticResource MaterialDesignFlatButton}" 
+                                        Command="{Binding RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=Page}, Path=DataContext.ChangeCategoryCommand}" 
+                                        CommandParameter="{Binding}">
+                                    <TextBlock VerticalAlignment="Center" FontSize="16" Text="{Binding Name}" Foreground="{StaticResource MaterialDesignLightForeground}"/>
+                                </Button>
+                            </StackPanel>
+                        </DataTemplate>
+                    </ItemsControl.ItemTemplate>
+                </ItemsControl>
+            </WrapPanel>
+            <Separator Grid.Row="0" VerticalAlignment="Bottom" Width="auto" HorizontalAlignment="Stretch" Margin="10,0"/>
+
+            <!--Options-->
+            <DockPanel  Margin="0,2" Grid.Row="1" LastChildFill="False">
+                <Button DockPanel.Dock="Left" Style="{StaticResource MaterialDesignFlatButton}" materialDesign:RippleAssist.Feedback="Gray" Padding="6,0" 
+                        Command="{x:Static materialDesign:DrawerHost.OpenDrawerCommand}" CommandParameter="{x:Static Dock.Left}" Foreground="White">
+                    <StackPanel Orientation="Horizontal">
+                        <materialDesign:PackIcon Kind="Filter" Height="18" Width="18" VerticalAlignment="Center"/>
+                        <TextBlock FontSize="18">Фильтр</TextBlock>
+                    </StackPanel>
+                </Button>
+                <Separator DockPanel.Dock="Left" VerticalAlignment="Center" Height="30" Width="30" Margin="-10,0,0,0" RenderTransformOrigin="0.5,0.5">
+                    <Separator.RenderTransform>
+                        <RotateTransform Angle="90"/>
+                    </Separator.RenderTransform>
+                </Separator>
+                <TextBlock DockPanel.Dock="Left" Visibility="{Binding SearchVisibility}" Margin="-6,0,0,0" VerticalAlignment="Center" FontSize="28" Text="Искали:" Foreground="White" FontFamily="Microsoft JhengHei UI"/>
+                <TextBlock DockPanel.Dock="Left" Visibility="{Binding SearchVisibility}" VerticalAlignment="Center" FontSize="28" Margin="5,0,0,0" Text="{Binding CurrentSearch}"/>
+                <Border DockPanel.Dock="Right" Padding="10,0" Margin="10,0" VerticalAlignment="Center" Height="30" CornerRadius="15,15,15,15" BorderThickness="2" BorderBrush="#FF949494">
+                    <ComboBox x:Name="bb" materialDesign:HintAssist.Hint="Сортировка" Width="150" ItemsSource="{Binding SortingList}" DisplayMemberPath="Name" SelectedValuePath="Name" SelectedValue="{Binding SelectedSortingName, Mode=TwoWay}" FontFamily="Microsoft JhengHei UI Light" Foreground="#FF673AB7">
+                        <i:Interaction.Triggers>
+                            <i:EventTrigger EventName="SelectionChanged">
+                                <i:InvokeCommandAction Command="{Binding SelectedItemChangedCommand}" />
+                            </i:EventTrigger>
+                        </i:Interaction.Triggers>
+                    </ComboBox>
+                </Border>
+            </DockPanel>
+
+            <!--Filters-->
+            <ItemsControl Margin="4,2" Grid.Row="2" ItemsSource="{Binding ActiveFilters}">
+                <ItemsControl.ItemsPanel>
+                    <ItemsPanelTemplate>
+                        <WrapPanel />
+                    </ItemsPanelTemplate>
+                </ItemsControl.ItemsPanel>
+                <ItemsControl.ItemTemplate>
+                    <DataTemplate>
+                        <materialDesign:Chip Margin="2" IsDeletable="True" 
+                                             DeleteCommand="{Binding RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=Page}, Path=DataContext.DeleteFilterCommand}" 
+                                             DeleteCommandParameter="{Binding}">
+                            <materialDesign:Chip.Content>
+                                <TextBlock>
+                                    <TextBlock.Text>
+                                        <MultiBinding StringFormat="{}{0}: {1}">
+                                            <Binding Path="Element"/>
+                                            <Binding Path="Value"/>
+                                        </MultiBinding>
+                                    </TextBlock.Text>
+                                </TextBlock>
+                            </materialDesign:Chip.Content>
+                        </materialDesign:Chip>
+                    </DataTemplate>
+                </ItemsControl.ItemTemplate>
+            </ItemsControl>
+
+            <!--Items-->
+            <ScrollViewer Grid.Row="3"  HorizontalScrollBarVisibility="Disabled" VerticalScrollBarVisibility="Auto">
+                <StackPanel>
+                    <ItemsControl ItemsSource="{Binding Products}" Grid.IsSharedSizeScope="True">
+                        <ItemsControl.ItemTemplate>
+                            <DataTemplate DataType="{x:Type datamodels:Product}">
+                                <Border x:Name="Border" Padding="8" BorderThickness="0 0 0 1" Background="{DynamicResource MaterialDesignChipBackground}" Height="auto" Width="auto" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" BorderBrush="#FF7160E8" MouseDown="Border_MouseDown" MouseUp="Border_MouseUp" Cursor="Hand" CornerRadius="5,5,5,5">
+                                    <Border.Triggers>
+                                        <EventTrigger RoutedEvent="MouseDown">
+                                            <EventTrigger.Actions>
+                                                <BeginStoryboard>
+                                                    <Storyboard>
+                                                        <ColorAnimation To="#FF673AB7" Storyboard.TargetProperty="(Border.Background).(Color)" FillBehavior="HoldEnd" Duration="0"/>
+                                                    </Storyboard>
+                                                </BeginStoryboard>
+                                            </EventTrigger.Actions>
+                                        </EventTrigger>
+                                        <EventTrigger RoutedEvent="MouseUp">
+                                            <EventTrigger.Actions>
+                                                <BeginStoryboard>
+                                                    <Storyboard>
+                                                        <ColorAnimation To="#FF673AB7" Storyboard.TargetProperty="(Border.Background).(Color)" FillBehavior="HoldEnd" Duration="0"/>
+                                                    </Storyboard>
+                                                </BeginStoryboard>
+                                            </EventTrigger.Actions>
+                                        </EventTrigger>
+                                    </Border.Triggers>
+                                    <i:Interaction.Triggers>
+                                        <i:EventTrigger EventName="MouseUp">
+                                            <i:InvokeCommandAction Command="{Binding RelativeSource={RelativeSource AncestorType=Page, Mode=FindAncestor}, Path=DataContext.ShowProductCommand}"
+                                                                   CommandParameter="{Binding .}"/>
+                                        </i:EventTrigger>
+                                    </i:Interaction.Triggers>
+                                    <Grid Height="150">
+                                        <Grid.ColumnDefinitions>
+                                            <ColumnDefinition SharedSizeGroup="Checkerz" />
+                                            <ColumnDefinition />
+                                            <ColumnDefinition Width="180"/>
+                                        </Grid.ColumnDefinitions>
+                                        <Grid.RowDefinitions>
+                                            <RowDefinition Height="40"/>
+                                            <RowDefinition />
+                                        </Grid.RowDefinitions>
+                                        <Border Background="Transparent" Grid.Row="0" Grid.RowSpan="2" Grid.Column="0" Height="150" Width="150">
+                                            <!--<Image RenderOptions.BitmapScalingMode="Fant" Stretch="Uniform" Height="150" Width="150" Source="{Binding ImageUrl, Converter={StaticResource OnlineImageConverter}}"/>-->
+                                        </Border>
+                                        <TextBlock Margin="8 0 0 0" Grid.Row="0" Grid.Column="1" FontWeight="Black" TextTrimming="CharacterEllipsis" FontSize="20" ToolTip="{Binding Name}" Text="{Binding Name}" VerticalAlignment="Top" HorizontalAlignment="Left" materialDesign:HintAssist.Hint="{Binding Name}" Foreground="White" FontFamily="Microsoft JhengHei UI" />
+                                        <ItemsControl Margin="8 0 0 0" Grid.Column="1" Grid.Row="1" HorizontalAlignment="Left" VerticalAlignment="Stretch" ItemsSource="{Binding Specifitation}" Foreground="#FF949494" FontFamily="Microsoft JhengHei UI Light">
+                                            <ItemsControl.ItemTemplate>
+                                                <DataTemplate>
+                                                    <WrapPanel Orientation="Vertical" >
+                                                        <TextBlock Margin="0,0,20,0" FontFamily="Microsoft JhengHei UI Light" FontSize="16">
+                                                            <Run Text="{Binding Element, StringFormat={}{0}: }"/>
+                                                            <Run Text="{Binding Value}"/>
+                                                        </TextBlock>
+                                                    </WrapPanel>
+                                                </DataTemplate>
+                                            </ItemsControl.ItemTemplate>
+                                        </ItemsControl>
+                                        <TextBlock Grid.Row="0" Grid.RowSpan="2" Grid.Column="2" VerticalAlignment="Center" HorizontalAlignment="Right" FontWeight="Medium" Foreground="White" FontFamily="Myanmar Text" LineHeight="6" >
+                                            <Run FontSize="20" Text="{Binding Price, Converter={StaticResource DecimalConverter}, ConverterParameter=N}"></Run>
+                                            <Run FontStretch="ExtraCondensed" BaselineAlignment="TextTop" TextDecorations="Underline" FontSize="15" Text="{Binding Price, Converter={StaticResource DecimalConverter}, ConverterParameter=D2}"></Run>
+                                            <Run FontSize="16" Text=" руб"></Run>
+                                        </TextBlock>
+                                    </Grid>
+                                </Border>
+                                <DataTemplate.Triggers>
+                                    <Trigger Property="IsMouseOver" Value="True">
+                                        <Setter TargetName="Border" Property="Background" Value="#FF673AB7" />
+                                    </Trigger>
+                                </DataTemplate.Triggers>
+                            </DataTemplate>
+                        </ItemsControl.ItemTemplate>
+                    </ItemsControl>
+                    <TextBlock HorizontalAlignment="Center" FontSize="18" Foreground="Gray" FontFamily="Trebuchet MS" Text="{Binding AdditionalInfoText}" Visibility="{Binding AdditionalInfoVisibility}"/>
+                </StackPanel>
+            </ScrollViewer>
+
+            <!--Page navigation-->
+            <DockPanel Grid.Column="0" Grid.Row="4" HorizontalAlignment="Stretch" LastChildFill="False">
+                <TextBlock DockPanel.Dock="Left" VerticalAlignment="Center" Text="Отображать:" Margin="0,0,5,0" Foreground="White"/>
+                <ComboBox DockPanel.Dock="Left" ItemsSource="{Binding ShowingItems}" SelectedValue="{Binding SelectedShowingNumber, Mode=TwoWay}" DisplayMemberPath="Name" SelectedValuePath="Name" materialDesign:ComboBoxAssist.ClassicMode="True" Cursor="Hand" Foreground="#FF673AB7">
+                    <i:Interaction.Triggers>
+                        <i:EventTrigger EventName="SelectionChanged">
+                            <i:InvokeCommandAction Command="{Binding SelectedItemChangedCommand}" />
+                        </i:EventTrigger>
+                    </i:Interaction.Triggers>
+                </ComboBox>
+
+                <WrapPanel DockPanel.Dock="Right" Margin="0,0,20,0">
+                    <Button Padding="0" Height="auto" Width="auto" Style="{StaticResource MaterialDesignIconForegroundButton}" Visibility="{Binding LeftVisibility}" Command="{Binding SwitchPageCommand}" CommandParameter="left" Foreground="White">
+                        <materialDesign:PackIcon Kind="ChevronLeft" Height="23" Width="23"/>
+                    </Button>
+                    <TextBlock Text="{Binding CurrentPage}" FontSize="18" Margin="4,0" Cursor="Hand"/>
+                    <Button Padding="0" Height="auto" Width="auto" Style="{StaticResource MaterialDesignIconForegroundButton}" Visibility="{Binding RightVisibility}" Command="{Binding SwitchPageCommand}" CommandParameter="right" Foreground="White">
+                        <materialDesign:PackIcon Kind="ChevronRight" Height="23" Width="23"/>
+                    </Button>
+                </WrapPanel>
+            </DockPanel>
+
+            <Grid Grid.Row="0" Grid.Column="0" Grid.RowSpan="5" Background="#CC111111" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Visibility="{Binding LoadingScreen}">
+                <materialDesign:Card UniformCornerRadius="14" Padding="4" Opacity="1" HorizontalAlignment="Center" VerticalAlignment="Center" Background="#FF272B2F">
+                    <ProgressBar  Style="{StaticResource MaterialDesignCircularProgressBar}" Value="0" IsIndeterminate="True"/>
+                </materialDesign:Card>
+            </Grid>
+        </Grid>
+    </Grid>
+</Page>

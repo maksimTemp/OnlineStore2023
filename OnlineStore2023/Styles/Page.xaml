@@ -1,0 +1,21 @@
+﻿<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+                    xmlns:converters="clr-namespace:OnlineStore2023.Converters">
+
+    <Style x:Key="Page_Style"
+           TargetType="{x:Type Page}">
+
+        <Setter Property="Background" 
+                Value="#FF212529"/>
+
+        <Style.Resources>
+            <Style TargetType="{x:Type TextBlock}" BasedOn="{StaticResource CustomMainTextBlock_Style}"/>
+            <Style TargetType="{x:Type PasswordBox}" BasedOn="{StaticResource CustomPasswordBox_Style}"/>
+            <Style TargetType="{x:Type TextBox}" BasedOn="{StaticResource CustomTextBox_Style}"/>
+            <Style TargetType="{x:Type Button}" BasedOn="{StaticResource CustomButton_Style}"/>
+            <Style TargetType="{x:Type ComboBox}" BasedOn="{StaticResource CustomComboBox_Style}"/>
+        </Style.Resources>
+
+    </Style>
+    
+</ResourceDictionary>

@@ -1,0 +1,146 @@
+﻿<Page x:Class="OnlineStore2023.View.ProductPage"
+      xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+      xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+      xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+      xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+      xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
+      xmlns:viewModels="clr-namespace:OnlineStore2023.ViewModel"
+      xmlns:models="clr-namespace:OnlineStore2023.Model"
+      xmlns:datamodels="clr-namespace:OnlineStore2023.DataContext"
+      xmlns:i="http://schemas.microsoft.com/xaml/behaviors"
+      xmlns:Controls="http://metro.mahapps.com/winfx/xaml/controls"
+      xmlns:converters="clr-namespace:OnlineStore2023.Converters"
+      mc:Ignorable="d" 
+      d:DesignHeight="600"
+      d:DesignWidth="800"
+      Style="{StaticResource Page_Style}"
+      Title="ProductPage">
+
+    <Page.Resources>
+        <converters:DecimalPlacesConverter x:Key="DecimalConverter"/>
+    </Page.Resources>
+
+    <Grid>
+        <ScrollViewer Padding="8,4">
+            <Grid>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="32" />
+                    <RowDefinition Height="auto" />
+                    <RowDefinition Height="auto" />
+                    <RowDefinition Height="auto" />
+                    <RowDefinition Height="auto" />
+                    <RowDefinition Height="auto" />
+                    <RowDefinition Height="auto" />
+                </Grid.RowDefinitions>
+
+                <!--Navigation-->
+                <WrapPanel Grid.Row="0" Margin="0,0,0,4">
+                    <Button Height="24" Padding="0" Style="{StaticResource MaterialDesignFlatButton}" 
+                        Foreground="{DynamicResource MaterialDesignLightForeground}" Command="{Binding GoBackCommand}">
+                        <materialDesign:PackIcon Kind="ChevronLeft" Width="24" Height="24"/>
+                    </Button>
+                    <Separator DockPanel.Dock="Left" VerticalAlignment="Center" Height="30" Width="30" Margin="-10,0,0,0" RenderTransformOrigin="0.5,0.5">
+                        <Separator.RenderTransform>
+                            <RotateTransform Angle="90"/>
+                        </Separator.RenderTransform>
+                    </Separator>
+                    <Button VerticalAlignment="Center" Width="auto" Height="auto" Style="{StaticResource MaterialDesignIconForegroundButton}"
+                            Command="{Binding GoHomeCommand}">
+                        <materialDesign:PackIcon Kind="Home" Height="auto" Width="auto" Foreground="{StaticResource MaterialDesignLightForeground}"/>
+                    </Button>
+                    <ItemsControl ItemsSource="{Binding NavList}">
+                        <ItemsControl.ItemsPanel>
+                            <ItemsPanelTemplate>
+                                <StackPanel Orientation="Horizontal" />
+                            </ItemsPanelTemplate>
+                        </ItemsControl.ItemsPanel>
+                        <ItemsControl.ItemTemplate>
+                            <DataTemplate>
+                                <StackPanel Orientation="Horizontal" DataContext="{Binding Item2}">
+                                    <TextBlock VerticalAlignment="Center" FontWeight="Black" FontSize="18" Text=">" Foreground="{StaticResource MaterialDesignLightForeground}"/>
+                                    <Button VerticalAlignment="Center" Margin="0,0,0,0" Padding="1,0" Width="auto" Height="auto" Style="{StaticResource MaterialDesignFlatButton}" 
+                                        Command="{Binding RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=Page}, Path=DataContext.ChangeCategoryCommand}" 
+                                        CommandParameter="{Binding}">
+                                        <TextBlock VerticalAlignment="Center" FontSize="16" Text="{Binding Name}" Foreground="White"/>
+                                    </Button>
+                                </StackPanel>
+                            </DataTemplate>
+                        </ItemsControl.ItemTemplate>
+                    </ItemsControl>
+                </WrapPanel>
+                <Separator Grid.Row="0" VerticalAlignment="Bottom" Width="auto" HorizontalAlignment="Stretch" Margin="10,0"/>
+
+                <!--Name-->
+                <DockPanel Height="40" Grid.Row="1" LastChildFill="False">
+                    <Viewbox DockPanel.Dock="Left" Height="40" HorizontalAlignment="Left">
+                        <TextBlock TextAlignment="Left" HorizontalAlignment="Left" Text="{Binding Name}" Foreground="White"/>
+                    </Viewbox>
+                </DockPanel>
+
+
+                <!--Photos and price-->
+                <DockPanel Grid.Row="2" LastChildFill="False" Margin="0,0,0,8">
+                    <StackPanel DockPanel.Dock="Left" Margin="170,0,0,0">
+                        <Border BorderThickness="1" BorderBrush="Gray" Height="260" Width="300" Margin="0,4">
+                            <!--<Image x:Name="actualImage" RenderOptions.BitmapScalingMode="Fant" Stretch="Uniform" Source="{Binding Image}" MaxHeight="250" Width="290"/>-->
+                        </Border>
+                        
+                    </StackPanel>
+                    <StackPanel DockPanel.Dock="Right" VerticalAlignment="Center" Margin="0,0,100,0">
+                        <TextBlock HorizontalAlignment="Center" FontFamily="Microsoft JhengHei UI Light" Foreground="White">
+                                <Run FontSize="40" Text="{Binding Price, Converter={StaticResource DecimalConverter}, ConverterParameter=N}"></Run>
+                                            <Run FontStretch="ExtraCondensed" BaselineAlignment="TextTop" TextDecorations="Underline" FontSize="20" Text="{Binding Price, Converter={StaticResource DecimalConverter}, ConverterParameter=D2}"></Run>
+                                            <Run FontSize="30" Text=" руб"></Run>
+                        </TextBlock>
+                        <Button Command="{Binding AddToCartCommand}">
+                            <WrapPanel>
+                                <materialDesign:PackIcon Kind="Cart" Height="24" Width="24"/>
+                                <TextBlock VerticalAlignment="Center" Text="Добавить в корзину"/>
+                            </WrapPanel>
+                        </Button>
+                        <TextBlock HorizontalAlignment="Center" Text="{Binding NoOfAvaible, StringFormat=Доступно {0} шт.}" Foreground="White"/>
+
+                    </StackPanel>
+                </DockPanel>
+
+
+                <!--Description-->
+                <materialDesign:Card Grid.Row="3" Margin="4,6" Padding="8,4" Background="#FF272B2F" Foreground="White" FontFamily="Microsoft JhengHei UI Light">
+                    <StackPanel>
+                        <TextBlock Text="Описание" TextAlignment="Left" FontSize="20" Margin="0,0,0,8"/>
+                        <TextBlock Text="{Binding Description}" TextAlignment="Justify" TextWrapping="Wrap"/>
+                    </StackPanel>
+                </materialDesign:Card>
+
+
+                <!--Specification-->
+                <materialDesign:Card Grid.Row="4" Margin="4,6" Padding="8,4" Background="#FF272B2F" Foreground="White" FontFamily="Microsoft JhengHei UI Light">
+                    <StackPanel>
+                        <TextBlock Text="Характеристики" FontSize="20" Margin="0,0,0,8"/>
+                        <ItemsControl  ItemsSource="{Binding Specification}" AlternationCount="2">
+                            <ItemsControl.ItemTemplate>
+                                <DataTemplate>
+                                    <WrapPanel Orientation="Vertical" >
+                                        <TextBlock Margin="0,0,20,0" FontSize="16">
+                                                            <Run Text="{Binding Element, StringFormat={}{0}: }"/>
+                                                            <Run Text="{Binding Value}"/>
+                                        </TextBlock>
+                                    </WrapPanel>
+                                </DataTemplate>
+                            </ItemsControl.ItemTemplate>
+                        </ItemsControl>
+                    </StackPanel>
+                </materialDesign:Card>
+            </Grid>
+        </ScrollViewer>
+
+        <!--Snackbar-->
+        <materialDesign:Snackbar Grid.Column="0" Grid.Row="0" MessageQueue="{Binding MessageQueue}"/>
+
+        <Grid Grid.Row="0" Grid.Column="0" Grid.RowSpan="5" Background="#CC111111" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Visibility="{Binding LoadingScreen}">
+            <materialDesign:Card UniformCornerRadius="14" Padding="4" Opacity="1" HorizontalAlignment="Center" VerticalAlignment="Center" Background="#FF272B2F">
+                <ProgressBar  Style="{StaticResource MaterialDesignCircularProgressBar}" Value="0" IsIndeterminate="True"/>
+            </materialDesign:Card>
+        </Grid>
+    </Grid>
+</Page>

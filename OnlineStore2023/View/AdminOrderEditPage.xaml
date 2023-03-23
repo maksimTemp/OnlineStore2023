@@ -1,0 +1,15 @@
+﻿<Page x:Class="OnlineStore2023.View.AdminOrderEditPage"
+      xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+      xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+      xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+      xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+      xmlns:local="clr-namespace:OnlineStore2023.View"
+      mc:Ignorable="d" 
+      d:DesignHeight="600" d:DesignWidth="750"
+      Style="{StaticResource Page_Style}"
+      Title="AdminOrderEditPage">
+
+    <Grid>
+        
+    </Grid>
+</Page>

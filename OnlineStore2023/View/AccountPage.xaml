@@ -1,0 +1,78 @@
+﻿<Page x:Class="OnlineStore2023.View.AccountPage"
+      xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+      xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+      xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+      xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+      xmlns:local="clr-namespace:OnlineStore2023.View"
+      xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
+      mc:Ignorable="d" 
+      d:DesignHeight="600"
+      d:DesignWidth="920"
+      Style="{StaticResource Page_Style}"
+      Title="AccountPage">
+
+    <Grid>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="170"/>
+            <ColumnDefinition Width="750" />
+        </Grid.ColumnDefinitions>
+
+        <Frame Grid.Column="1" Height="600" Width="750" Content="{Binding FrameView}"/>
+
+        <materialDesign:Card Grid.Column="0" HorizontalAlignment="Left" VerticalAlignment="Stretch" Background="#272B2F">
+            <DockPanel LastChildFill="False" Width="160">
+                <!--Account-->
+                <Button Margin="0" DockPanel.Dock="Top" Height="40" Style="{DynamicResource MaterialDesignFlatButton}"
+                        Command="{Binding ChangeViewCommand}" CommandParameter="account">
+                    <TextBlock FontSize="16" Text="Аккаунт"/>
+                </Button>
+                <Separator Margin="0" DockPanel.Dock="Top" HorizontalAlignment="Stretch" Height="1"/>
+
+                <!--Shipping details-->
+                <!--<Button Margin="0" DockPanel.Dock="Top" Height="40" Style="{DynamicResource MaterialDesignFlatButton}"
+                        Command="{Binding ChangeViewCommand}" CommandParameter="delivery">
+                    <TextBlock FontSize="16" Text="Доставка"/>
+                </Button>
+                <Separator Margin="0" DockPanel.Dock="Top" HorizontalAlignment="Stretch" Height="1"/>-->
+
+                <!--Orders-->
+                <Button Margin="0" DockPanel.Dock="Top" Height="40" Style="{DynamicResource MaterialDesignFlatButton}"
+                        Command="{Binding ChangeViewCommand}" CommandParameter="orders">
+                    <TextBlock FontSize="16" Text="Мои заказы"/>
+                </Button>
+                <Separator Margin="0" DockPanel.Dock="Top" HorizontalAlignment="Stretch" Height="1"/>
+
+                <StackPanel HorizontalAlignment="Stretch" DockPanel.Dock="Top" Margin="0,20,0,0" Visibility="{Binding EmployeeSectionVisibility}">
+                    <TextBlock Text="Секция работника" HorizontalAlignment="Center" FontSize="14"  Typography.Capitals="AllSmallCaps" Foreground="Gray" FontFamily="Microsoft JhengHei UI Light"/>
+                    <Button FontSize="16" Command="{Binding ChangeViewCommand}" CommandParameter="adminOrders" Content="Заказы" Style="{DynamicResource MaterialDesignFlatButton}" Padding="0"/>
+                    <Button FontSize="16" Command="{Binding ChangeViewCommand}" CommandParameter="adminProduct" Content="Товары" Style="{DynamicResource MaterialDesignFlatButton}" Padding="0"/>
+                    <Separator Margin="0" DockPanel.Dock="Top" HorizontalAlignment="Stretch" Height="1"/>
+                </StackPanel>
+                <StackPanel HorizontalAlignment="Stretch" DockPanel.Dock="Top" Margin="0,20,0,0" Visibility="{Binding AdminSectionVisibility}">
+                    <TextBlock Text="Секция администратора" HorizontalAlignment="Center" FontSize="14"  Typography.Capitals="AllSmallCaps" Foreground="Gray" FontFamily="Microsoft JhengHei UI Light"/>
+                    <!--<Button FontSize="16" Command="{Binding ChangeViewCommand}" CommandParameter="adminRole" Content="Роли" Style="{DynamicResource MaterialDesignFlatButton}" Padding="0"/>-->
+                    <!--<Button FontSize="16" Command="{Binding ChangeViewCommand}" CommandParameter="adminPosition" Content="Позиции" Style="{DynamicResource MaterialDesignFlatButton}" Padding="0"/>
+                    <Button FontSize="16" Command="{Binding ChangeViewCommand}" CommandParameter="adminAccount" Content="Аккаунт" Style="{DynamicResource MaterialDesignFlatButton}" Padding="0"/>-->
+                    <Button FontSize="16" Command="{Binding ChangeViewCommand}" CommandParameter="adminCustomers" Content="Покупатели" Style="{DynamicResource MaterialDesignFlatButton}" Padding="0"/>
+                    <Button FontSize="16" Command="{Binding ChangeViewCommand}" CommandParameter="adminStaff" Content="Работники" Style="{DynamicResource MaterialDesignFlatButton}" Padding="0"/>
+                    <!--<Button FontSize="16" Command="{Binding ChangeViewCommand}" CommandParameter="adminOrders" Content="Заказы" Style="{DynamicResource MaterialDesignFlatButton}" Padding="0"/>-->
+                </StackPanel>
+
+                <!--Logout-->
+                <Button Padding="0" DockPanel.Dock="Bottom" Height="40" Style="{DynamicResource MaterialDesignFlatButton}"
+                        Foreground="Red" Command="{Binding LogoutCommand}">
+                    <WrapPanel HorizontalAlignment="Center" VerticalAlignment="Center">
+                        <materialDesign:PackIcon Kind="Shutdown" VerticalAlignment="Center" Height="22" Width="22"/>
+                        <TextBlock FontSize="16" Text="Выйти" VerticalAlignment="Center"/>
+                    </WrapPanel>
+                </Button>
+            </DockPanel>
+        </materialDesign:Card>
+
+        <!--<Grid Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="2" Background="#CC111111" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Visibility="{Binding LoadingScreen}">
+            <materialDesign:Card UniformCornerRadius="14" Padding="4" Opacity="1" HorizontalAlignment="Center" VerticalAlignment="Center">
+                <ProgressBar  Style="{StaticResource MaterialDesignCircularProgressBar}" Value="0" IsIndeterminate="True"/>
+            </materialDesign:Card>
+        </Grid>-->
+    </Grid>
+</Page>
